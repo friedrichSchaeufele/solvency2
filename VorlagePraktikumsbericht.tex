@@ -1,0 +1,142 @@
+%===================  Dokument Typ  ========================
+\documentclass[parskip,12pt,paper=a4]{scrartcl}
+%\documentclass[parskip,12pt,paper=a4]{scrreprt}
+%=================== Grundpakete Mathematik, Layout, Deutsche Zeichen ==============
+\usepackage{amsmath, amssymb, graphics, setspace,amsthm}
+
+\usepackage[left=3cm,right=3cm,top=3cm,bottom=3cm,includeheadfoot]{geometry}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[right]{eurosym}
+\usepackage{enumerate}
+\date{}
+%================== BiBliographie ===============================================
+\usepackage{cite}
+\usepackage{bibgerm}
+
+
+%========================= Blindtexte Einfügen  =============================================
+\usepackage[]{blindtext}
+
+%================== Überschriften Tabellen und Diagramme ========================
+\usepackage{caption}
+\usepackage{array}
+
+
+\usepackage{graphicx}
+\usepackage{lastpage}
+\usepackage{longtable}
+
+\usepackage[right]{eurosym}
+\newcommand{\mathsym}[1]{{}}
+\newcommand{\unicode}[1]{{}}
+
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+\setcounter{section}{0}
+
+% ===================== Colorierung von Tabellen   =================================
+\usepackage{color}
+\usepackage{colortbl}
+\usepackage[table]{xcolor}
+
+\definecolor{cell}{RGB}{220,230,240}
+\definecolor{line}{RGB}{80,130,190}
+
+
+\usepackage[T1]{fontenc}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage[]{helvet}
+\usepackage[]{lastpage}
+\usepackage[]{booktabs}
+%\usepackage[]{scrpage2}
+
+%==================== Definitionen und Sätze ===============================================
+
+\newtheorem{mydef}{Definition}[section]
+\newtheorem{mytheorem}{Satz}[section]
+\newtheorem{myexample}{Beispiel}[section]
+\newtheorem{myremark}{Bemerkung}[section]
+
+%========================= Blindtexte Einfügen  =============================================
+\usepackage[]{blindtext}
+%====================== Kop- und Fußzeilen definieren  ================================
+\usepackage{fancyhdr}
+\pagestyle{fancy} %eigener Seitenstil
+\fancyhf{} %alle Kopf- und Fußzeilenfelder bereinigen
+\fancyhead[L]{} %Kopfzeile links
+\fancyhead[C]{Praktikum Solvency II} %zentrierte Kopfzeile
+\fancyhead[R]{ } %Kopfzeile rechts
+\renewcommand{\headrulewidth}{2pt} %obere Trennlinie
+\fancyfoot[L]{\tiny{\copyright Aktuarskanzlei Dr. Ströter\\Rüsselsheim, Oktober 2012}} %Fußzeile links
+\fancyfoot[C]{Seite \thepage \ von\ \pageref{LastPage} } %Seitennummer
+\fancyfoot[R]{Version 1.0} %Fußzeile rechts
+\renewcommand{\footrulewidth}{1pt} %untere Trennlinie
+
+\renewcommand{\headrule}{\vbox to 1pt{\hbox to\headwidth{\textcolor{blue}{\hrulefill}}\vss}} 
+\renewcommand{\footrule}{\vbox to 0pt{\hbox to\headwidth{\textcolor{blue}{\hrulefill}}\vss}}
+
+
+
+% Links Blau einfärben 
+%\usepackage{hyperref}
+%\hypersetup{%
+%  colorlinks=true,   % color references
+%  linkcolor = blue,  % Linkcolor blue
+%  citecolor = blue,  % cite-color  blue
+%  urlcolor = blue,  % cite-color blue
+%  pdfpagemode=UseNone,  % PDF-Viewer startet ohne Inhaltsverzeichnis et.al.
+%  pdfstartview=FitH} % PDF-Viewer benutzt beim Start bestimmte Seitenbreite
+  
+  
+\begin{document}
+\titlehead{Fachbereich Mathematik\\Johann Wolfgang Goethe Universität}
+\title{Berechnung eines SCR eines Modellversicherungsbestandes nach Maßgaben von Solvency II}
+\subtitle{\textit{--------\\Praktikumsdokumentation\\zur\\ Vorlesung Solvency II}}
+\author{Name Autor 1\\
+		Name Autor 2\\
+		Name Autor 3}
+
+\maketitle
+
+
+\begin{abstract}
+\noindent \textbf{Zusammenfassung  --  \,}  \blindtext
+\end{abstract}
+\clearpage
+\tableofcontents
+\clearpage
+
+\section{Grundlagen}
+\subsection{Aufgabenstellung}
+\subsection{Beschreibung Modellversicherung}
+\subsection{Vorgaben durch Solvency II}
+\begin{itemize}
+	\item Angabe Rechtsquellen
+	\item einbezogene Vorschriften
+	\item etc ...
+\end{itemize}
+
+Kurzbeschreibung, was ist eine SCR, Solvenzbilanz
+
+\section{Berechnung des Deckungskapitals des Bestandes}
+
+\subsection{Bestimmung der Beiträge}
+\subsection{Bestimmung des Deckungskapitals des Bestandes für RZ}
+
+\section{Simulation}
+
+\subsection{Management Regeln}
+\subsection{Silmulationsszenarien gem Standardformel}
+\subsubsection{Szenario Langlebigkeit}
+\subsubsection{Szenario ...}
+\subsubsection{Szenario Zinsschocks .....}
+\subsection{Ergebnisse}
+\section{Erstellung einer Solvenzbilanz}
+
+\end{document}
+
+
+
+
+
