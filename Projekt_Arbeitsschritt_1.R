@@ -85,7 +85,7 @@ create_tPx_gesamt_Matrix <- function(lambda_1=1,lambda_2=1){
   bufferMatrix <- matrix(nrow = AgeMax,ncol=AgeMax,byrow=TRUE)
   for (i in 1:AgeMax) {
     for (j in 1:AgeMax) {
-      if(i<=(length(Tafeln$x)-j)){
+      if(i<=(length(Tafeln$x)-j+1)){
         bufferMatrix[i,j] = func_tPx_gesamt(i-1,j-1)
       }
     }
@@ -93,4 +93,5 @@ create_tPx_gesamt_Matrix <- function(lambda_1=1,lambda_2=1){
   return(bufferMatrix)
 }
 
-tPx_gesamt_Matrix <- create_tPx_gesamt_Matrix()
+# folgender schritt erfolgt in der final datei mit spezifischen lambdas 
+#tPx_gesamt_Matrix <- create_tPx_gesamt_Matrix(1,1)

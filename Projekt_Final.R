@@ -45,7 +45,7 @@ source('Projekt_abzinsungstabellen.R',local = TRUE)
 
 source('Projekt_Arbeitsschritt_1.R',local = TRUE)
 #create tPx Matrix with specific lambdas
-# tPx_gesamt_Matrix <- create_tPx_gesamt_Matrix(1,1,1,1)
+tPx_gesamt_Matrix <- create_tPx_gesamt_Matrix(1,1)
 
 #######################################################################################
 ### lese Arbeitsschritt 2 ein - Funktionen und Ausgabe fuer tVx
