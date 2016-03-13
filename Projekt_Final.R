@@ -55,6 +55,7 @@ source('Projekt_Arbeitsschritt_2.R',local = TRUE)
 
 #######################################################################################
 ### Simulation - Vorbereitungen und Start
+### Arbeitsschritt 3 und 4
 #######################################################################################
 
 # Anzahl Simulationen
