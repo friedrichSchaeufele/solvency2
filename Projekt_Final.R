@@ -35,7 +35,7 @@ ZinsSK = 1
 # to do
 
 # Anzahl Simulationen
-n = 10
+n = 15
 
 #######################################################################################
 ### erstelle und lese Abzinsungstabelle ein
@@ -59,6 +59,11 @@ source('Projekt_Arbeitsschritt_2.R',local = TRUE)
 
 Deckungsrueckstellung = sum(t_V_x_einzeln_vec)
 
+Deckungsrueckstellung_einnahmen_seit_Versicherungsbeginn = P_x_PST_einzeln_vec
+for (i in 1:length(Deckungsrueckstellung_einnahmen_seit_Versicherungsbeginn)) {
+  Deckungsrueckstellung_einnahmen_seit_Versicherungsbeginn[i] = Deckungsrueckstellung_einnahmen_seit_Versicherungsbeginn[i]*Bestand$t[i]
+}
+sum(Deckungsrueckstellung_einnahmen_seit_Versicherungsbeginn)
 #######################################################################################
 ### Simulation - Vorbereitungen und Start
 ### Arbeitsschritt 3 und 4
@@ -68,6 +73,7 @@ Deckungsrueckstellung = sum(t_V_x_einzeln_vec)
 # EWR_vec = matrix(nrow = 1,ncol=n,byrow=TRUE)
 EWR_vec = rep(0,n)
 
+system.time(
 # starte berechnungen
 for (p in 1:n) {
   # baue Eintrittstabelle mit Werten für Eintritt in die jeweilige Pflegestufe und Sterbealter
@@ -237,7 +243,7 @@ for (p in 1:n) {
     EWR = EWR + 12 * Bestand$L[i] * sum(q_vec) - sum(p_vec)
   }
   EWR_vec[p] = EWR
-}
+})
 
 # > EWR_vec
 # [1] 1177936731 1152709344 1184291407 1149240466 1201506911 1156066798 1186641412 1166289355
