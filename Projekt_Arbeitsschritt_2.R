@@ -4,7 +4,7 @@
 # vektor der pflegestufen-anteile
 q_PST = c(0.4,0.7,1)
 
-# vektoren für A_x_PST, muss dann jeweils mit leistung multipliziert werden
+# vektoren für A_x_PST, muss dann noch jeweils mit leistung multipliziert werden
 A_x_I_vec <- rep(0,AgeMax)
 for (i in 1:AgeMax) {
   for (k in 0:(AgeMax-i)) {
@@ -50,8 +50,8 @@ func_P_x_III_value <- function(x){
 }
 
 
-# jetzt Berechnung der Deckungsrueckstellung t_V_x = Leistung * (A_x+t^PST - P_x^PST * a_x+t)
-
+# jetzt Berechnung der jeweiligen PST-Deckungsrueckstellung t_V_x = Leistung * (A_x+t^PST - P_x^PST * a_x+t)
+# nutze dafuer folgende funktionen
 t_V_x_I_ohne_Leistung <- function(t,x){
   return(A_x_I_vec[x+t]-func_P_x_I_value(x)*a_pp_vec[x+t])
 }
@@ -66,18 +66,26 @@ t_V_x_III_ohne_Leistung <- function(t,x){
 
 
 # berechne jetzt die t_v_x werte der einzelnen kontrakte
-t_V_x_einzeln <- rep(0,length(Bestand$x))
-#test #t_V_x_einzeln <- rep(0,3)
-for (i in 1:length(t_V_x_einzeln)) {
+t_V_x_einzeln_vec <- rep(0,length(Bestand$x))
+#test #t_V_x_einzeln_vec <- rep(0,3)
+for (i in 1:length(t_V_x_einzeln_vec)) {
   for (k in 0:(AgeMax-Bestand$x[i])) {
-    t_V_x_einzeln[i] = t_V_x_I_ohne_Leistung(k,Bestand$x[i]) + t_V_x_II_ohne_Leistung(k,Bestand$x[i]) + t_V_x_III_ohne_Leistung(k,Bestand$x[i])
+    t_V_x_einzeln_vec[i] = t_V_x_I_ohne_Leistung(k,Bestand$x[i]) + t_V_x_II_ohne_Leistung(k,Bestand$x[i]) + t_V_x_III_ohne_Leistung(k,Bestand$x[i])
   }
-  t_V_x_einzeln[i] = t_V_x_einzeln[i]*Bestand$L[i]
+  t_V_x_einzeln_vec[i] = t_V_x_einzeln_vec[i]*Bestand$L[i]
+}
+
+# berechne jetzt die P_x^Pst werte der einzelnen kontrakte
+P_x_PST_einzeln_vec <- rep(0,length(Bestand$x))
+#test #t_V_x_einzeln <- rep(0,3)
+for (i in 1:length(P_x_PST_einzeln_vec)) {
+    P_x_PST_einzeln_vec[i] = Bestand$L[i]*(func_P_x_I_value(Bestand$x[i]) + func_P_x_II_value(Bestand$x[i]) + func_P_x_III_value(Bestand$x[i]))
 }
 
 
+
 #####################################################################################
-#####################################################################################
+####   alte versionen  ##############################################################
 #####################################################################################
 
 # Kopfschaden_Matrix <- matrix(nrow = length(Tafeln$Kx_Pst_I),ncol = 3)

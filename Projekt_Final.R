@@ -15,7 +15,8 @@ setwd("C:/Users/maja/Downloads/SolvencyProject/solvency2")
 #######################################################################################
 Bestand <- read.csv("BestandTest.csv", header = TRUE)
 #Bestand <- read.csv("Bestand.csv", header = TRUE)
-Tafeln <- read.csv("Tafeln.csv", header = TRUE)
+#Tafeln <- read.csv("Tafeln.csv", header = TRUE)
+Tafeln <- read.csv("TafelnAktualisiert.csv", header = TRUE)
 Zinsstrukturkurven <- read.csv("Zinsstrukturkurven.csv", header = TRUE)
 
 #######################################################################################
