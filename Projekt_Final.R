@@ -26,17 +26,6 @@ Zinsstrukturkurven <- read.csv("Zinsstrukturkurven.csv", header = TRUE)
 # maximal erreichbares Alter
 AgeMax = length(Tafeln$x)
 
-# Variable zur wahl der Zinsstrukturkurve fuer die Abzinsung
-# ZinsSK = 1 = RFnoVA
-# ZinsSK = 2 = RFVA
-ZinsSK = 1
-
-# Lamdas fuer tPx
-# to do
-
-# Anzahl Simulationen
-n = 15
-
 #######################################################################################
 ### erstelle und lese Abzinsungstabelle ein
 #######################################################################################
@@ -69,13 +58,17 @@ sum(Deckungsrueckstellung_einnahmen_seit_Versicherungsbeginn)
 ### Arbeitsschritt 3 und 4
 #######################################################################################
 
+# Anzahl Simulationen
+n = 23
+
 # EWR-Matrix zum abspeichern der berrechneten EWR-Werte
 # EWR_vec = matrix(nrow = 1,ncol=n,byrow=TRUE)
-EWR_vec = rep(0,n)
+EWR_vec = rep(0,6*n)
+EWR_group_vec = rep(0,6*n)
 
 system.time(
 # starte berechnungen
-for (p in 1:n) {
+for (p in 1:(6*n)) {
   # baue Eintrittstabelle mit Werten für Eintritt in die jeweilige Pflegestufe und Sterbealter
   # Eintrittstabelle <- matrix(nrow = 4,ncol=length(Bestand$x),byrow=TRUE)
   Eintrittstabelle <-
@@ -131,6 +124,36 @@ for (p in 1:n) {
   # berechne Ausgaben/Einnahmen pro Klienten und fasse am Schluss zusammen
   
   EWR = 0
+  
+  # setze diskontfaktor
+  if (p<=n) {
+    ZinsSK = 1
+    EWR_group_vec[p] = 1
+  }
+  if (p>n && p<=2*n) {
+    ZinsSK = 2
+    EWR_group_vec[p] = 2
+  }
+  if (p>2*n && p<=3*n) {
+    ZinsSK = 3
+    EWR_group_vec[p] = 3
+  }
+  if (p>3*n && p<=4*n) {
+    ZinsSK = 4
+    EWR_group_vec[p] = 4
+  }
+  if (p>4*n && p<=5*n) {
+    ZinsSK = 5
+    EWR_group_vec[p] = 5
+  }
+  if (p>5*n) {
+    ZinsSK = 6
+    EWR_group_vec[p] = 6
+  }
+  # cat('zinssk = ')
+  # cat(ZinsSK)
+  # cat('\n')
+  
   for (i in 1:ncol(Eintrittstabelle)) {
     # aktuelles alter
     actAge = Bestand$x[i] + Bestand$t[i]
@@ -217,8 +240,6 @@ for (p in 1:n) {
     #cat(q_vec)
     #cat('\n')
     
-    # Ausgaben = sum(L*q_vec*abzinsungsfaktor)
-    # q_vec * abzVek
     for (k in 1:length(q_vec)) {
       if (k <= ncol(DiskontZinsTabelle)) {
         q_vec[k] = q_vec[k] * DiskontZinsTabelle[ZinsSK, k]
@@ -239,14 +260,8 @@ for (p in 1:n) {
     #cat(sum(Bestand$L[i]*q_vec))
     #cat('\n')
     
-    
     EWR = EWR + 12 * Bestand$L[i] * sum(q_vec) - sum(p_vec)
   }
   EWR_vec[p] = EWR
 })
 
-# > EWR_vec
-# [1] 1177936731 1152709344 1184291407 1149240466 1201506911 1156066798 1186641412 1166289355
-# [9] 1195579997 1214046198
-# > mean(EWR_vec)
-# [1] 1178430862
