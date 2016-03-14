@@ -67,13 +67,17 @@ t_V_x_III_ohne_Leistung <- function(t,x){
 
 # berechne jetzt die t_v_x werte der einzelnen kontrakte
 t_V_x_einzeln_vec <- rep(0,length(Bestand$x))
-#test #t_V_x_einzeln_vec <- rep(0,3)
 for (i in 1:length(t_V_x_einzeln_vec)) {
-  for (k in 0:(AgeMax-Bestand$x[i])) {
-    t_V_x_einzeln_vec[i] = t_V_x_I_ohne_Leistung(k,Bestand$x[i]) + t_V_x_II_ohne_Leistung(k,Bestand$x[i]) + t_V_x_III_ohne_Leistung(k,Bestand$x[i])
-  }
-  t_V_x_einzeln_vec[i] = t_V_x_einzeln_vec[i]*Bestand$L[i]
+  t_V_x_einzeln_vec[i] = Bestand$L[i]*(t_V_x_I_ohne_Leistung(Bestand$t[i],Bestand$x[i]) + t_V_x_II_ohne_Leistung(Bestand$t[i],Bestand$x[i]) + t_V_x_III_ohne_Leistung(Bestand$t[i],Bestand$x[i]))
 }
+
+#test #t_V_x_einzeln_vec <- rep(0,3)
+# for (i in 1:length(t_V_x_einzeln_vec)) {
+#   for (k in 0:(AgeMax-Bestand$x[i])) {
+#     t_V_x_einzeln_vec[i] = t_V_x_I_ohne_Leistung(k,Bestand$x[i]) + t_V_x_II_ohne_Leistung(k,Bestand$x[i]) + t_V_x_III_ohne_Leistung(k,Bestand$x[i])
+#   }
+#   t_V_x_einzeln_vec[i] = t_V_x_einzeln_vec[i]*Bestand$L[i]
+# }
 
 # berechne jetzt die P_x^Pst werte der einzelnen kontrakte
 P_x_PST_einzeln_vec <- rep(0,length(Bestand$x))

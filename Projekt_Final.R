@@ -13,8 +13,8 @@ setwd("C:/Users/maja/Downloads/SolvencyProject/solvency2")
 #######################################################################################
 ### daten einlesen
 #######################################################################################
-Bestand <- read.csv("BestandTest.csv", header = TRUE)
-#Bestand <- read.csv("Bestand.csv", header = TRUE)
+#Bestand <- read.csv("BestandTest.csv", header = TRUE)
+Bestand <- read.csv("Bestand.csv", header = TRUE)
 #Tafeln <- read.csv("Tafeln.csv", header = TRUE)
 Tafeln <- read.csv("TafelnAktualisiert.csv", header = TRUE)
 Zinsstrukturkurven <- read.csv("Zinsstrukturkurven.csv", header = TRUE)
@@ -33,6 +33,9 @@ ZinsSK = 1
 
 # Lamdas fuer tPx
 # to do
+
+# Anzahl Simulationen
+n = 1
 
 #######################################################################################
 ### erstelle und lese Abzinsungstabelle ein
@@ -54,16 +57,16 @@ tPx_gesamt_Matrix <- create_tPx_gesamt_Matrix(1,1)
 
 source('Projekt_Arbeitsschritt_2.R',local = TRUE)
 
+Deckungsrueckstellung = sum(t_V_x_einzeln_vec)
+
 #######################################################################################
 ### Simulation - Vorbereitungen und Start
 ### Arbeitsschritt 3 und 4
 #######################################################################################
 
-# Anzahl Simulationen
-n = 1
-
 # EWR-Matrix zum abspeichern der berrechneten EWR-Werte
-EWRMatrix = matrix(nrow = 1,ncol=n,byrow=TRUE)
+# EWR_vec = matrix(nrow = 1,ncol=n,byrow=TRUE)
+EWR_vec = rep(0,n)
 
 # starte berechnungen
 for (p in 1:n) {
@@ -193,11 +196,11 @@ for (i in 1:ncol(Eintrittstabelle)) {
   # Ausgaben = sum(L*q*abzinsungsfaktor)
   # q * abzVek
   for (k in 1:length(q)) {
-    if (k <= ncol(Abzinsungstabelle)) {
-      q[k] = q[k]*Abzinsungstabelle[ZinsSK,k]
+    if (k <= ncol(DiskontZinsTabelle)) {
+      q[k] = q[k]*DiskontZinsTabelle[ZinsSK,k]
     }
-    if (k > ncol(Abzinsungstabelle)) {
-      q[k] = q[k] * Abzinsungstabelle[ZinsSK,ncol(Abzinsungstabelle)]
+    if (k > ncol(DiskontZinsTabelle)) {
+      q[k] = q[k] * DiskontZinsTabelle[ZinsSK,ncol(DiskontZinsTabelle)]
     }
   }
     #cat('q = ')
@@ -210,6 +213,6 @@ for (i in 1:ncol(Eintrittstabelle)) {
 
   EWR = EWR+12*sum(Bestand$L[i]*q)
 }
-EWRMatrix[p]=EWR
+EWR_vec[p]=EWR
 
 }
