@@ -26,9 +26,11 @@ Zinsstrukturkurven <- read.csv("Zinsstrukturkurven.csv", header = TRUE)
 # maximal erreichbares Alter
 AgeMax = length(Tafeln$x)
 
-langesLeben = TRUE
+langesLeben = FALSE
 
-SornoIn5Jahren = FALSE
+Massenaustritt = TRUE
+MassenaustrittImJahr = 5
+MassenaustrittsRate = 0.5
 
 #######################################################################################
 ### erstelle und lese Abzinsungstabelle ein
@@ -57,13 +59,14 @@ for (i in 1:length(Deckungsrueckstellung_einnahmen_seit_Versicherungsbeginn)) {
   Deckungsrueckstellung_einnahmen_seit_Versicherungsbeginn[i] = Deckungsrueckstellung_einnahmen_seit_Versicherungsbeginn[i]*Bestand$t[i]
 }
 sum(Deckungsrueckstellung_einnahmen_seit_Versicherungsbeginn)
+#write(sum(Deckungsrueckstellung_einnahmen_seit_Versicherungsbeginn), file = "Deckunsrueckstellung_konstZins.csv", sep = ',')
 #######################################################################################
 ### Simulation - Vorbereitungen und Start
 ### Arbeitsschritt 3 und 4
 #######################################################################################
 
 # Anzahl Simulationen
-n = 23
+n = 10
 
 # EWR-Matrix zum abspeichern der berrechneten EWR-Werte
 # EWR_vec = matrix(nrow = 1,ncol=n,byrow=TRUE)
@@ -89,7 +92,7 @@ for (p in 1:(n)) {
       'clientInPST2At',
       'clientInPST1At',
       'StornoAt')
-  
+  #countAustritt = 0
   # Algoritmus für das Befüllen der Eintrittstabelle
   for (i in 1:ncol(Eintrittstabelle)) {
     Eintrittstabelle[1, i] = AgeMax
@@ -97,6 +100,7 @@ for (p in 1:(n)) {
     Eintrittstabelle[3, i] = AgeMax + 1
     Eintrittstabelle[4, i] = AgeMax + 1
     Eintrittstabelle[5, i] = AgeMax + 1
+
     for (j in (Bestand$x[i] + Bestand$t[i]):AgeMax) {
       if (langesLeben == FALSE && runif(1, 0, 1) <= Tafeln$qx_m[j]) {
         Eintrittstabelle[1, i] = j
@@ -117,10 +121,23 @@ for (p in 1:(n)) {
           j < Eintrittstabelle[2, i] && j < Eintrittstabelle[3, i]) {
         Eintrittstabelle[4, i] = j
       }
-      if (runif(1, 0, 1) <= Tafeln$wx_m[j] &&
+      if (Massenaustritt == FALSE && runif(1, 0, 1) <= Tafeln$wx_m[j] &&
           j < Eintrittstabelle[2, i] &&
           j < Eintrittstabelle[3, i] && j < Eintrittstabelle[4, i]) {
         Eintrittstabelle[5, i] = j
+      }
+      if (Massenaustritt == TRUE) {
+        Austritt = FALSE
+        if (j == (Bestand$x[i] + Bestand$t[i]) && runif(1,0,1) < MassenaustrittsRate) {
+          Austritt = TRUE
+          #countAustritt = countAustritt+1
+          Eintrittstabelle[5, i] = Bestand$x[i] + Bestand$t[i] + MassenaustrittImJahr
+        }
+        if (Austritt == FALSE && runif(1, 0, 1) <= Tafeln$wx_m[j] &&
+            j < Eintrittstabelle[2, i] &&
+            j < Eintrittstabelle[3, i] && j < Eintrittstabelle[4, i]) {
+          Eintrittstabelle[5, i] = j
+        }
       }
     }
   }
@@ -210,6 +227,11 @@ for (p in 1:(n)) {
       p_vec = 0
     }
     
+    if (storno == TRUE) {
+      q_vec[w] = (w-1)*P_x_PST_einzeln_vec[i]
+      p_vec[w] = 0.0
+    }
+    
     # years to pstI
     ytPST1 = Eintrittstabelle[4, i] - actAge
     if (ytPST1 < w && storno == FALSE) {
@@ -271,11 +293,15 @@ for (p in 1:(n)) {
     # 
     #cat(sum(Bestand$L[i]*q_vec))
     #cat('\n')
-    
-    EWR = EWR + 12 * Bestand$L[i] * sum(q_vec) - sum(p_vec)
+    if (storno == TRUE) {
+      EWR = EWR + sum(q_vec) - sum(p_vec)
+    }
+    if (storno == FALSE) {
+      EWR = EWR + 12 * Bestand$L[i] * sum(q_vec) - sum(p_vec)
+    }
   }
   EWR_vec[p] = EWR
 })
 
 results_vec <- c(EWR_vec,EWR_group_vec)
-write(results_vec, file = "results_vec_langesLeben.csv", sep = ',')
+#write(results_vec, file = "results_vec_storno_50ProzentNach5Jahren_akt.csv", sep = ',')

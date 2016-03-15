@@ -4,9 +4,9 @@
 
 #erstelle Rechnungszinsvektor
 rZins = rep(0.02,length(Tafeln$x))
-for (i in 6:length(Tafeln$x)) {
-  rZins[i]=0.015
-}
+# for (i in 6:length(Tafeln$x)) {
+#   rZins[i]=0.015
+# }
 diskontRZins <- rep(1,length(rZins))
 diskontRZins[1] = (1/(1+rZins[1]))
 for (i in 2:length(diskontRZins)) {
