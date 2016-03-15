@@ -26,9 +26,9 @@ Zinsstrukturkurven <- read.csv("Zinsstrukturkurven.csv", header = TRUE)
 # maximal erreichbares Alter
 AgeMax = length(Tafeln$x)
 
-langesLeben = FALSE
+langesLeben = TRUE
 
-Massenaustritt = TRUE
+Massenaustritt = FALSE
 MassenaustrittImJahr = 5
 MassenaustrittsRate = 0.5
 
@@ -304,4 +304,4 @@ for (p in 1:(n)) {
 })
 
 results_vec <- c(EWR_vec,EWR_group_vec)
-#write(results_vec, file = "results_vec_storno_50ProzentNach5Jahren_akt.csv", sep = ',')
+#write(results_vec, file = "results_vec_ll2.csv", sep = ',')
