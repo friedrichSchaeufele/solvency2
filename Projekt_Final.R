@@ -26,6 +26,10 @@ Zinsstrukturkurven <- read.csv("Zinsstrukturkurven.csv", header = TRUE)
 # maximal erreichbares Alter
 AgeMax = length(Tafeln$x)
 
+langesLeben = TRUE
+
+SornoIn5Jahren = FALSE
+
 #######################################################################################
 ### erstelle und lese Abzinsungstabelle ein
 #######################################################################################
@@ -63,12 +67,15 @@ n = 23
 
 # EWR-Matrix zum abspeichern der berrechneten EWR-Werte
 # EWR_vec = matrix(nrow = 1,ncol=n,byrow=TRUE)
-EWR_vec = rep(0,6*n)
-EWR_group_vec = rep(0,6*n)
+#EWR_vec = rep(0,6*n)
+#EWR_group_vec = rep(0,6*n)
+EWR_vec = rep(0,n)
+EWR_group_vec = rep(1,n)
+
 
 system.time(
 # starte berechnungen
-for (p in 1:(6*n)) {
+for (p in 1:(n)) {
   # baue Eintrittstabelle mit Werten für Eintritt in die jeweilige Pflegestufe und Sterbealter
   # Eintrittstabelle <- matrix(nrow = 4,ncol=length(Bestand$x),byrow=TRUE)
   Eintrittstabelle <-
@@ -91,7 +98,11 @@ for (p in 1:(6*n)) {
     Eintrittstabelle[4, i] = AgeMax + 1
     Eintrittstabelle[5, i] = AgeMax + 1
     for (j in (Bestand$x[i] + Bestand$t[i]):AgeMax) {
-      if (runif(1, 0, 1) <= Tafeln$qx_m[j]) {
+      if (langesLeben == FALSE && runif(1, 0, 1) <= Tafeln$qx_m[j]) {
+        Eintrittstabelle[1, i] = j
+        break
+      }
+      if (langesLeben == TRUE && runif(1, 0, 1) <= Tafeln$qx_m[j]*0.8) {
         Eintrittstabelle[1, i] = j
         break
       }
@@ -126,30 +137,31 @@ for (p in 1:(6*n)) {
   EWR = 0
   
   # setze diskontfaktor
-  if (p<=n) {
-    ZinsSK = 1
-    EWR_group_vec[p] = 1
-  }
-  if (p>n && p<=2*n) {
-    ZinsSK = 2
-    EWR_group_vec[p] = 2
-  }
-  if (p>2*n && p<=3*n) {
-    ZinsSK = 3
-    EWR_group_vec[p] = 3
-  }
-  if (p>3*n && p<=4*n) {
-    ZinsSK = 4
-    EWR_group_vec[p] = 4
-  }
-  if (p>4*n && p<=5*n) {
-    ZinsSK = 5
-    EWR_group_vec[p] = 5
-  }
-  if (p>5*n) {
-    ZinsSK = 6
-    EWR_group_vec[p] = 6
-  }
+  ZinsSK = 1
+  # if (p<=n) {
+  #   ZinsSK = 1
+  #   EWR_group_vec[p] = 1
+  # }
+  # if (p>n && p<=2*n) {
+  #   ZinsSK = 2
+  #   EWR_group_vec[p] = 2
+  # }
+  # if (p>2*n && p<=3*n) {
+  #   ZinsSK = 3
+  #   EWR_group_vec[p] = 3
+  # }
+  # if (p>3*n && p<=4*n) {
+  #   ZinsSK = 4
+  #   EWR_group_vec[p] = 4
+  # }
+  # if (p>4*n && p<=5*n) {
+  #   ZinsSK = 5
+  #   EWR_group_vec[p] = 5
+  # }
+  # if (p>5*n) {
+  #   ZinsSK = 6
+  #   EWR_group_vec[p] = 6
+  # }
   # cat('zinssk = ')
   # cat(ZinsSK)
   # cat('\n')
@@ -265,3 +277,5 @@ for (p in 1:(6*n)) {
   EWR_vec[p] = EWR
 })
 
+results_vec <- c(EWR_vec,EWR_group_vec)
+write(results_vec, file = "results_vec_langesLeben.csv", sep = ',')
